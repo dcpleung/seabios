@@ -346,10 +346,12 @@ static void sercon_1000(struct bregs *regs)
     SET_LOW(sercon_row_last, 0);
     SET_LOW(sercon_attr_last, 0);
 
+#if 0
     sercon_term_reset();
     sercon_term_no_linewrap();
     if (clearscreen)
         sercon_term_clear_screen();
+#endif
 }
 
 /* Set text-mode cursor shape */
