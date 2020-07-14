@@ -1,0 +1,38 @@
+# Copyright (c) 2020 Linaro Limited.
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build 128k and 256k bios images
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: build 128k
+      run: |
+        make KCONFIG_CONFIG=${PWD}/zephyr/128k/.config OUT=${PWD}/zephyr/128k/ oldnoconfig
+        make KCONFIG_CONFIG=${PWD}/zephyr/128k/.config OUT=${PWD}/zephyr/128k/ EXTRAVERSION=-zephyr
+
+    - name: upload 128k
+      uses: actions/upload-artifact@v2
+      continue-on-error: True
+      with:
+        name: bios-128k.bin
+        path: zephyr/128k/bios.bin
+
+    - name: build 256k
+      run: |
+        make KCONFIG_CONFIG=${PWD}/zephyr/256k/.config OUT=${PWD}/zephyr/256k/ oldnoconfig
+        make KCONFIG_CONFIG=${PWD}/zephyr/256k/.config OUT=${PWD}/zephyr/256k/ EXTRAVERSION=-zephyr
+
+    - name: upload 256k
+      uses: actions/upload-artifact@v2
+      continue-on-error: True
+      with:
+        name: bios-256k.bin
+        path: zephyr/256k/bios.bin
